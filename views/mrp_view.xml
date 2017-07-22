@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+       	<record model="ir.ui.view" id="quality_checking_history_tree_view">
+            <field name="name">Quality History</field>
+            <field name="model">quality.checking.line.history</field>
+            <field name="arch" type="xml">
+                <tree string="Quality Checking" create='false' delete='false'>
+                    <field name="mrp_id"/>
+                    <field name="product_id"/>
+                    <field name="quantity"/>
+                    <field name="uom_id"/>
+                    <field name="lot_id"/>
+                    <!--field name="reject_qty"/-->
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+	
+	<record model="ir.ui.view" id="quality_checking_history_form_view">
+            <field name="name">Quality History </field>
+            <field name="model">quality.checking.line.history</field>
+            <field name="arch" type="xml">
+                <form string="Quality Checking" create='false' delete='false'>
+                   <header>
+                   	<button name="action_validate" type="object" class="oe_highlight oe_edit_only"
+                                nstate="in_mo,partial" string="Validate" />
+                   	<field name="nstate" widget="statusbar"/>
+                   </header>
+                   <sheet>
+                   	<div class="oe_button_box" name="button_box">
+			       <button class="oe_stat_button" type="object" name="open_inspection" icon="fa-bookmark-o" string="Inspections"/>
+	   		</div>
+                   	<group col="4">
+		            <field name="mrp_id"/>
+		            <field name="product_id"/>
+		            <field name="lot_id"/>
+		            <label for="quantity" />
+				    <div >
+					<field name="quantity" readonly="1" nolabel="1" class="oe_inline"/> 
+					<field name="uom_id"  readonly="1" nolabel="1" class="oe_inline"/>
+				    </div>
+                   	</group>
+                   	<group col="4">
+		            <field name="approve_qty" nstate="in_mo,partial"/>
+		            <field name="reject_qty" nstate="in_mo,partial"/>
+                   	</group>
+		  </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="quality_line_history_search_view">
+            <field name="name">Scrap Search</field>
+            <field name="model">quality.checking.line.history</field>
+            <field name="arch" type="xml">
+                <search string="Search Scrap">
+                    <group>
+                        <field name="mrp_id" />
+                        <field name="lot_id" />
+                        <field name="quality_id" />
+                        <field name="product_id" />
+                    </group>
+                    <newline />
+                    <filter name="group_mrp_id" string="Manufacture" context="{'group_by':'mrp_id'}"/>
+                    <filter string="From Quality"
+                            domain="[('move_status', '=', 'in_mo')]"/>
+                    <filter string="Move To Scrap"
+                            domain="[('move_status', '=', 'move_scrap')]"/>
+                    <filter string="Return To Quality"
+                            domain="[('move_status', '=', 'move_quality')]"/>
+                    <newline />
+                    <group expand="0" string="Group by...">
+                        <filter string="Manufacture"
+                                domain="[]"
+                                context="{'group_by': 'mrp_id'}" />
+                        <filter string="Lot Number"
+                                domain="[]"
+                                context="{'group_by': 'lot_id'}" />
+                        <filter string="Product"
+                                domain="[]"
+                                context="{'group_by': 'product_id'}" />
+                        <filter string="Quality Number"
+                                domain="[]"
+                                context="{'group_by': 'quality_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_quality_checking_line_history">
+            <field name="name">Quality History</field>
+            <field name="res_model">quality.checking.line.history</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_group_mrp_id': 1}</field>
+        </record>
+        
+        <record id="product_template_quality_action" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="res_model">product.template</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{}</field>
+        </record>
+ <!--menu in quality -->
+        <menuitem id="menu_quality_product" name="Products" parent="main_quality_menu_id" sequence="40"/>
+	        <menuitem id="menu_quality_product_form" name="Products" action="product_template_quality_action"  parent="menu_quality_product"/>
+	        <menuitem id="menu_mrp_bom_form_action" action="mrp.mrp_bom_form_action" parent="menu_quality_product"/>
+	
+ <!--menu in Manufacturing -->	
+	<menuitem id="meun_mrp_scrap" name="Scrap Quantity" sequence="4" parent="base.menu_mrp_root"/>
+		<menuitem id="mrp_scrap_id" name="Scrap Quantity" sequence="1" action="action_quality_checking_line_history" parent="meun_mrp_scrap"/>
+
+    </data>
+</openerp>

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+       	<record model="ir.ui.view" id="quality_checking_tree_view">
+            <field name="name">Quality Checking</field>
+            <field name="model">quality.checking</field>
+            <field name="arch" type="xml">
+                <tree string="Quality Checking" create='false' delete='false'>
+                    <field name="name"/>
+                    <field name="source"/>
+                    <field name="create_date" string="Date"/>
+                    <field name="product_id"/>
+                    <field name="quantity"/>
+                    <field name="approved_qty"/>
+                    <field name="reject_qty"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+	<record model="ir.ui.view" id="quality_checking_form_view">
+            <field name="name">Quality Checking Form</field>
+            <field name="model">quality.checking</field>
+            <field name="arch" type="xml">
+                <form string="Quality Checking" create='false'>
+                    <header>
+                    	<button name="quality_test" class="btn-primary" type="object" string="Quality Test" attrs="{'invisible':[('state','!=','available')]}"/>
+                    	<field name="state" widget="statusbar" statusbar_colors='{"canceled": "red"}'/>
+                    </header>
+                    <sheet>
+                    	<div class="oe_button_box" name="button_box">
+			       <button class="oe_stat_button" type="object" name="open_test_performed" icon="fa-bookmark-o" string="Inspections"/>
+			   </div>
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" class="oe_inline"/>
+                        </h1>
+		        <group col="4">
+			    	<field name="product_id" readonly="1"/>
+			    	<field name="company_id" groups="base.group_multi_company"/>
+				<label for="quantity"/>
+				    <div>
+				        <field name="quantity" readonly="1" nolabel="1" class="oe_inline"/> 
+				        <field name="uom_id"  readonly="1" nolabel="1" class="oe_inline"/>
+				    </div>
+				<field name="user" readonly="1"/>
+				<field name="create_date" string="Date"/>
+		        </group>
+		        <group col="4">
+				<field name="mrp_id" attrs="{'invisible':[('mrp_id','=',False)]}"/>
+				<field name="mo_state" attrs="{'invisible':[('mrp_id','=',False)]}"/>
+				<field name="purchase_id" attrs="{'invisible':[('purchase_id','=',False)]}"/>
+		        </group>
+		        <group col="4">
+		        	<field name="picking_id" />
+		        </group>
+                        <notebook>
+                        	<page string="Quantity Available">
+					<field name="quality_line" nolabel="1">
+						<tree delete='false' create='false'>
+							<field name="n_type" />
+							<field name="name" />
+							<field name="create_date" string="Date"/>
+							<field name="product_id" />
+							<field name="lot_id" />
+							<field name="quantity" sum="quantity"/>
+							<field name="state" />
+						</tree>
+					</field>
+                        	</page>
+                        	<page string="Approved Quantity">
+                        		<field name="history_line_approve" nolabel="1">
+						<tree delete='false' create='false' editable="bottom">
+							<field name="create_date" string="Date"/>
+							<field name="product_id" />
+							<field name="lot_id" />
+							<field name="quantity" string="Quantity Approve" sum="quantity"/>
+							
+							<field name="uom_id" />
+						</tree>
+					</field>
+                        	</page>
+                        	<page string="Reject Quantity">
+                        		<field name="history_line_reject" nolabel="1">
+						<tree delete='false' create='false' editable="bottom">
+							<field name="create_date" string="Date"/>
+							<field name="product_id" />
+							<field name="lot_id" />
+							<field name="quantity" string="Quantity Rejected" sum="quantity"/>
+							<field name="uom_id" />
+						</tree>
+					</field>
+                        	</page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="quality_checking_search_view">
+            <field name="name">Quality Checking Search</field>
+            <field name="model">quality.checking</field>
+            <field name="arch" type="xml">
+                <search string="Search Quality Checking">
+                    <newline />
+                    <group>
+                        <field name="state" />
+                    </group>
+                    <filter string="Available" domain="[('state', '=', 'available')]"/>
+                    <filter string="Waiting" domain="[('state', '=', 'waiting')]"/>
+                    <filter string="Complete" domain="[('state', '=', 'complete')]"/>
+                    <newline />
+                    <group expand="0" string="Group by...">
+                        <filter string="Source"
+                                domain="[]"
+                                context="{'group_by': 'source'}" />
+                        <filter string="State"
+                                domain="[]"
+                                context="{'group_by': 'state'}" />
+                        <filter string="Product"
+                                domain="[]"
+                                context="{'group_by': 'product_id'}" />
+                        <filter string="User"
+                                domain="[]"
+                                context="{'group_by': 'user'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_quality_checking">
+            <field name="name">Quality Checking</field>
+            <field name="res_model">quality.checking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{"search_default_state":'available',"search_default_type_state":'available'}</field>
+        </record>
+
+	<record model="ir.ui.view" id="quality_checking_line_tree_view">
+            <field name="name">Quality Checking Line Tree View</field>
+            <field name="model">quality.checking.line</field>
+            <field name="arch" type="xml">
+                <tree string="Quality Checking" create='false' delete='false'>
+                    <field name="quality_id"/>
+                    <field name="n_type" />
+                    <field name="name" string="Source"/>
+                    <field name="create_date" string="Date"/>
+                    <field name="product_id"/>
+                    <field name="lot_id"/>
+                    <field name="quantity" sum="quantity"/>
+                    <field name="uom_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+	<record model="ir.ui.view" id="quality_checking_line_form_view">
+            <field name="name">Quality Checking Line Form</field>
+            <field name="model">quality.checking.line</field>
+            <field name="arch" type="xml">
+                <form string="Quality Checking Line" create='false'>
+                    <header>
+                    	<button name="quality_test" class="btn-primary" type="object" string="Quality Test" attrs="{'invisible':[('state','!=','available')]}"/>
+                    	<field name="state" widget="statusbar" statusbar_colors='{"canceled": "red"}'/>
+                    </header>
+                    <sheet>
+                    	  <div class="oe_button_box" name="button_box">
+			       <button class="oe_stat_button" type="object" name="open_test_performed" icon="fa-bookmark-o" string="Inspections"/>
+			   </div>
+                           <group col="4">
+                            	<field name="product_id" readonly="1"/>
+                            	<field name="company_id" groups="base.group_multi_company"/>
+                                <label for="quantity"/>
+				    <div>
+				        <field name="quantity" readonly="1" nolabel="1" class="oe_inline"/> 
+				        <field name="uom_id"  readonly="1" nolabel="1" class="oe_inline"/>
+				    </div>
+			        <field name="create_date" string="Date"/>
+			        <field name="n_type" />
+                           </group>
+                           
+                           <group col="4">
+                                <field name="scrap_reason" />
+                           </group>
+                           <notebook>
+                        	<page string="Approved Quantity">
+                        		<field name="history_line_approve" nolabel="1">
+						<tree delete='false' create='false' editable="bottom">
+							<field name="create_date" string="Date"/>
+							<field name="product_id" />
+							<field name="quantity" string="Quantity Approve" sum="quantity"/>
+							<field name="uom_id" />
+						</tree>
+					</field>
+                        	</page>
+                        	<page string="Reject Quantity">
+                        		<field name="history_line_reject" nolabel="1">
+						<tree delete='false' create='false' editable="bottom">
+							<field name="create_date" string="Date"/>
+							<field name="product_id" />
+							<field name="uom_id" />
+							<field name="move_status" />
+						</tree>
+					</field>
+                        	</page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+                <record model="ir.ui.view" id="quality_checking_line_search_view">
+            <field name="name">Quality Checking Line Search</field>
+            <field name="model">quality.checking.line</field>
+            <field name="arch" type="xml">
+                <search string="Search Quality Checking Line">
+                    <newline />
+                    <group>
+                        <field name="state" />
+                    </group>
+                    <filter string="Available" domain="[('state', '=', 'available')]"/>
+                    <filter string="Complete" domain="[('state', '=', 'complete')]"/>
+                    <newline />
+                    <group expand="0" string="Group by...">
+                        <filter string="Source"
+                                domain="[]"
+                                context="{'group_by': 'quality_id'}" />
+                        <filter string="State"
+                                domain="[]"
+                                context="{'group_by': 'state'}" />
+                        <filter string="Product"
+                                domain="[]"
+                                context="{'group_by': 'product_id'}" />
+                        <filter string="User"
+                                domain="[]"
+                                context="{'group_by': 'user'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_quality_checking_line">
+            <field name="name">Quality Checking Line</field>
+            <field name="res_model">quality.checking.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{"search_default_state":'available',"search_default_type_state":'available'}</field>
+
+        </record>
+        
+	<menuitem id="main_quality_menu_id" name="Quality Control" sequence="40" groups="group_quality_check_user" />
+	
+	<menuitem id="parent_quality_menu_id" parent="main_quality_menu_id" name="Quality Control" sequence="10"/>
+        <menuitem id="quality_check_menu" name="Quality Check Requests" parent="parent_quality_menu_id"  action="action_quality_checking" sequence="1" />
+        <menuitem id="quality_check_line_menu" name="Orders Lines" parent="parent_quality_menu_id"  action="action_quality_checking_line" sequence="2" />
+    </data>
+</openerp>

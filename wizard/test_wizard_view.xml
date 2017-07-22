@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_scrap_doc_form" model="ir.ui.view">
+            <field name="name">Quality Scrap Document form</field>
+            <field name="model">quality.scrap.doc</field>
+            <field name="arch" type="xml">
+                <form string="Upload Scrap Documents">
+                    <group>
+                        <field name="uploaded_documents" widget="many2many_binary"/>
+                    </group>
+                    <footer>
+                        <button name="action_upload_document" string="Upload" type="object" class="oe_highlight"/>
+                        or
+                        <button special="cancel" class="oe_link" string="Cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_quality_scrap_document" model="ir.actions.act_window">
+            <field name="name">Quality Scrap Document</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">quality.scrap.doc</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>
