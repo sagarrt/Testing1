@@ -28,10 +28,10 @@ class QualityDashboard(models.Model):
 	domain=[]
 	_name=''
 	if self._context.get('n_state') == 'mo':
-		domain=[('mrp_id', '=',True)]
+		domain=[('mrp_id', '!=',False)]
 		_name = "Manufacturing Check Orders"
 	if self._context.get('n_state') == 'po':
-		domain=[('purchase_id', '=', True)]
+		domain=[('purchase_id', '!=', False)]
 		_name = "Purchase Check Orders"
 	if self._context.get('n_state') == 'available':
 		domain=[('state', '=', 'available')]

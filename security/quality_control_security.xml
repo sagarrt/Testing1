@@ -33,5 +33,19 @@
             <field name="global" eval="True"/>
             <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'child_of', [user.company_id.id])]</field>
         </record>
+        
+        <record id="scrap_film_mrp_rule" model="ir.rule">
+            <field name="name">Quality control Scrap Film</field>
+            <field name="model_id" ref="model_quality_checking_line_history"/>
+            <field name="groups" eval="[(4,ref('gt_order_mgnt.group_film_product'))]"></field>
+            <field name="domain_force">[('product_id.categ_id.cat_type','=','film')]</field>
+        </record>
+
+	<record  id="scrap_injection_mrp_rule" model="ir.rule">
+             <field name="name">Quality control Scrap injection</field>
+             <field name="model_id" ref="model_quality_checking_line_history"></field>
+	     <field name="groups" eval="[(4,ref('gt_order_mgnt.group_injection_product'))]"></field>
+             <field name="domain_force">[('product_id.categ_id.cat_type','=','injection')]</field>
+	</record>
     </data>
 </openerp>

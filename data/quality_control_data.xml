@@ -15,7 +15,7 @@
             <field name="padding">6</field>
         </record>
         
-        <record id="seq_quality_check" model="ir.sequence">
+        <record id="seq_quality_checking" model="ir.sequence">
             <field name="name">Quality Checking</field>
             <field name="code">quality.checking</field>
             <field name="prefix">QCC-</field>

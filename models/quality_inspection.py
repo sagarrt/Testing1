@@ -186,7 +186,6 @@ class QualityInspection(models.Model):
 		  		self.action_create_history(inspection,quality_id,qty,state)
     	     
             if inspection.approve_qty:
-            	approve_qty += inspection.approve_qty
             	state='approve'
             	qty=inspection.approve_qty
             	quality_id=inspection.quality_line_id.id if inspection.quality_line_id else False,
@@ -208,6 +207,8 @@ class QualityInspection(models.Model):
   	    	if inspection.quality_line_id.quantity == 0:
 			inspection.quality_line_id.state='complete'
  	    flag=False
+ 	    if inspection.full_test:
+ 	    	inspection.approve_qty = approve_qty
  	    if inspection.approve_qty:
 	 	    for picking in inspection.quality_id.picking_id:
 	 	    	for operation in picking.pack_operation_product_ids:
@@ -216,8 +217,14 @@ class QualityInspection(models.Model):
 	 	    		operation.qty_done=approve_qty
 	 	    inspection.quality_id.picking_id.do_new_transfer()
 	 	    if flag:
-		    	wiz_id=self.env['stock.backorder.confirmation'].search([('pick_id','=',inspection.quality_id.picking_id.id)])
-		    	wiz_id.process()
+	 	    	print "999999999999999"
+	 	    	wiz_immediate_id=self.env['stock.immediate.transfer'].search([('pick_id','=',inspection.quality_id.picking_id.id)])
+	 	    	if wiz_immediate_id:
+	 	    		wiz_immediate_id.process()
+	 	    	else:	
+		    		wiz_backorder_id=self.env['stock.backorder.confirmation'].search([('pick_id','=',inspection.quality_id.picking_id.id)])
+		    		print "5555555",wiz_backorder_id,inspection.quality_id.picking_id
+		    		wiz_backorder_id.process()
 	    	    inspection.quality_id.picking_id = self.env['stock.picking'].search([('backorder_id', '=', inspection.quality_id.picking_id.id)],limit=1).id
             return True
             

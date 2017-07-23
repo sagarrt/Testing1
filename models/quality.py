@@ -23,7 +23,8 @@ class QualityChecking(models.Model):
 	self.reject_qty = reject
     
     @api.one
-    @api.depends('quantity','mo_state','quality_line','history_line_reject','history_line_reject.move_status')
+    @api.depends('quantity','mo_state','quality_line','history_line_reject','history_line_reject.move_status',
+    		'quality_line.approved_qty','quality_line.reject_qty')
     def _get_state(self):
 	if self.quantity:
 		self.state='available'
@@ -70,7 +71,8 @@ class QualityChecking(models.Model):
      
     @api.model
     def create(self,vals):
-    	vals.update({'name':self.env['ir.sequence'].next_by_code('quality.checking')})
+    	name=self.env['ir.sequence'].next_by_code('quality.checking')
+    	vals.update({'name':name})
     	return super(QualityChecking,self).create(vals)
     
     @api.multi

@@ -24,7 +24,7 @@
             <field name="arch" type="xml">
                 <form string="Quality Checking" create='false'>
                     <header>
-                    	<button name="quality_test" class="btn-primary" type="object" string="Quality Test" attrs="{'invisible':[('state','!=','available')]}"/>
+                    	<button name="quality_test" class="btn-primary" type="object" string="Quality Test" attrs="{'invisible':['|',('quantity','=','0'),('state','!=','available')]}"/>
                     	<field name="state" widget="statusbar" statusbar_colors='{"canceled": "red"}'/>
                     </header>
                     <sheet>
@@ -52,7 +52,7 @@
 				<field name="purchase_id" attrs="{'invisible':[('purchase_id','=',False)]}"/>
 		        </group>
 		        <group col="4">
-		        	<field name="picking_id" />
+		        	<field name="picking_id" attrs="{'invisible':[('picking_id','=',False)]}"/>
 		        </group>
                         <notebook>
                         	<page string="Quantity Available">
@@ -68,7 +68,7 @@
 						</tree>
 					</field>
                         	</page>
-                        	<page string="Approved Quantity">
+                        	<page string="Approved Quantity" attrs="{'invisible':[('history_line_approve','=',[])]}">
                         		<field name="history_line_approve" nolabel="1">
 						<tree delete='false' create='false' editable="bottom">
 							<field name="create_date" string="Date"/>
@@ -80,7 +80,7 @@
 						</tree>
 					</field>
                         	</page>
-                        	<page string="Reject Quantity">
+                        	<page string="Reject Quantity" attrs="{'invisible':[('history_line_reject','=',[])]}">
                         		<field name="history_line_reject" nolabel="1">
 						<tree delete='false' create='false' editable="bottom">
 							<field name="create_date" string="Date"/>
@@ -185,7 +185,7 @@
                                 <field name="scrap_reason" />
                            </group>
                            <notebook>
-                        	<page string="Approved Quantity">
+                        	<page string="Approved Quantity"  attrs="{'invisible':[('history_line_approve','=',[])]}">
                         		<field name="history_line_approve" nolabel="1">
 						<tree delete='false' create='false' editable="bottom">
 							<field name="create_date" string="Date"/>
@@ -195,7 +195,7 @@
 						</tree>
 					</field>
                         	</page>
-                        	<page string="Reject Quantity">
+                        	<page string="Reject Quantity"  attrs="{'invisible':[('history_line_reject','=',[])]}">
                         		<field name="history_line_reject" nolabel="1">
 						<tree delete='false' create='false' editable="bottom">
 							<field name="create_date" string="Date"/>

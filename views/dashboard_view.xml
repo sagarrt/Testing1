@@ -115,12 +115,12 @@
                             <div class="row">
                             	<a class="o_project_kanban_box" name="" type="action">
                        		<a name="action_open_tests" context="{'n_state': 'generic'}" type="object">
-					   <span title="Generic Tests" t-esc="n_status.generic"> Generic Tests
+					   Generic Tests <span title="Generic Tests" t-esc="n_status.generic"> 
 					   </span></a>
 			 	</a>
 				<a class="o_project_kanban_box" name="" type="action">
 				<a name="action_open_tests" context="{'n_state': 'related'}" type="object">
-					   <span title="Related Tests" t-esc="n_status.related"> Related Tests
+					   Related Tests <span title="Related Tests" t-esc="n_status.related"> 
 					   </span></a>
 			        </a>
                             </div>
@@ -128,12 +128,12 @@
                             <div class="row">
                             	<a class="o_project_kanban_box" name="" type="action">
                        		<a name="action_open_questions" context="{'n_state': 'qualitative'}" type="object">
-					   <span title="Qualitative Question" t-esc="n_status.qualitative"> Qualitative Question
+					   Qualitative Question<span title="Qualitative Question" t-esc="n_status.qualitative"> 
 					   </span></a>
 			 	</a>
 			   	<a class="o_project_kanban_box" name="" type="action">
 				<a name="action_open_questions" context="{'n_state': 'quantitative'}" type="object">
-					   <span title="quantitative Question" t-esc="n_status.quantitative"> Quantitative Question
+					   Quantitative Question<span title="quantitative Question" t-esc="n_status.quantitative">  
 					   </span></a>
 				</a>
                             </div>

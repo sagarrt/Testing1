@@ -22,6 +22,7 @@
     	"security/quality_control_security.xml",
     	"views/quality_view.xml",
         "data/quality_control_data.xml",
+        "data/stock_data.xml",
         "wizard/test_wizard_view.xml",
         "views/quality_inspection_view.xml",
         "views/quality_test_view.xml",
